@@ -1,0 +1,26 @@
+"use strict";
+
+import assert from "power-assert";
+import debug from "debug";
+import TAPI from "../../source/twilio";
+
+
+const log = debug("test:twilio");
+
+describe("Twilio", () => {
+	if (process.env.TWILIO_API === "true") {
+		log("Twilio API was not tested");
+		return;
+	}
+
+	it("should send sms", () => {
+		return TAPI.sendSMS({
+				to: "+6281239198760",
+				body: "test!"
+			})
+			.then(sms => {
+				log(sms);
+				assert(sms);
+			});
+	});
+});
