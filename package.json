@@ -15,7 +15,7 @@
     "url": "https://github.com/TrejGun/connect.git"
   },
   "dependencies": {
-    "core-decorators": "0.10.0",
+    "core-decorators": "0.11.0",
     "debug": "2.2.0",
     "googleapis": "2.1.7",
     "mime": "1.3.4",
@@ -31,8 +31,8 @@
   },
   "devDependencies": {
     "abl-constants": "git+ssh://github.com/TrejGun/constants.git#4cd2a54b25e87dff8b0bfea41ba7fe2aa6262579",
-    "babel-core": "6.4.0",
-    "babel-cli": "6.4.0",
+    "babel-core": "6.4.5",
+    "babel-cli": "6.4.5",
     "babel-plugin-espower": "2.1.0",
     "babel-plugin-transform-decorators-legacy": "1.3.4",
     "babel-polyfill": "6.3.14",
