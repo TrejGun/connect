@@ -34,7 +34,7 @@
     "twilio": "3.1.0-edge"
   },
   "devDependencies": {
-    "abl-constants": "git+ssh://github.com/TrejGun/constants.git#4cd2a54b25e87dff8b0bfea41ba7fe2aa6262579",
+    "abl-constants": "git+ssh://github.com/TrejGun/constants.git#v0.0.2",
     "babel-core": "6.4.5",
     "babel-cli": "6.4.5",
     "babel-plugin-espower": "2.1.0",
