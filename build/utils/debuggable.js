@@ -44,7 +44,7 @@ var Debuggable = function () {
 					args[_key] = arguments[_key];
 				}
 
-				return (0, _debug2.default)("API:" + _this.displayName).apply(undefined, _toConsumableArray(args.map(function (arg) {
+				return (0, _debug2.default)("connect:" + _this.displayName).apply(undefined, _toConsumableArray(args.map(function (arg) {
 					return _util2.default.inspect(arg, { depth: 10, colors: true });
 				})));
 			};

@@ -17,7 +17,7 @@ export default class Debuggable {
 
 		if (isDebuggable) {
 			this.log = (...args) =>
-				debug(`API:${this.displayName}`)(...args.map(arg =>
+				debug(`connect:${this.displayName}`)(...args.map(arg =>
 					util.inspect(arg, {depth: 10, colors: true})));
 		} else {
 			this.log = () => null;
