@@ -11,6 +11,8 @@ var _q = require("q");
 
 var _q2 = _interopRequireDefault(_q);
 
+var _misc = require("abl-utils/build/misc");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function makeError(key) {
@@ -54,7 +56,7 @@ function payment(fn) {
 
 			return fn.bind(this).apply(undefined, args);
 		} else {
-			return _q2.default.resolve({ id: null });
+			return _q2.default.resolve({ id: "abl_" + (0, _misc.getRandomString)(20) });
 		}
 	};
 }

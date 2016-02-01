@@ -1,6 +1,7 @@
 "use strict";
 
 import q from "q";
+import {getRandomString} from "abl-utils/build/misc";
 
 
 function makeError(key) {
@@ -35,7 +36,7 @@ export function payment(fn) {
 		if (paymentMethod === "credit") {
 			return fn.bind(this)(...args);
 		} else {
-			return q.resolve({id: null});
+			return q.resolve({id: "abl_" + getRandomString(20)});
 		}
 	};
 }
