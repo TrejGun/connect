@@ -21,10 +21,8 @@ export default new class StripeAPI extends Debuggable {
 
 	@decorate(promise)
 	@decorate(payment)
-	chargesCreate(user, data, idempotencyKey) {
-		return stripe(user.payment.privateKey).charges.create(data, {
-			idempotency_key: idempotencyKey // eslint-disable-line camelcase
-		});
+	chargesCreate(user, data, options) {
+		return stripe(user.payment.privateKey).charges.create(data, options);
 	}
 
 	@decorate(promise)
@@ -128,14 +126,19 @@ export default new class StripeAPI extends Debuggable {
 	// TRANSFER
 
 	@decorate(promise)
-	transfersList(user, data) {
+	transferCreate(user, data, options) {
+		return stripe(user.payment.privateKey).transfers.create(data, options);
+	}
+
+	@decorate(promise)
+	transferList(user, data) {
 		return stripe(user.payment.privateKey).transfers.list(data);
 	}
 
 	// BALANCE
 
 	@decorate(promise)
-	transfersList(user, data) {
+	transactionsList(user, data) {
 		return stripe(user.payment.privateKey).balance.listTransactions(data);
 	}
 

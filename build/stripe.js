@@ -2,7 +2,7 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _desc, _value, _class, _class2, _temp;
+var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _desc, _value, _class, _class2, _temp;
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
@@ -63,7 +63,7 @@ function _applyDecoratedDescriptor(target, property, decorators, descriptor, con
 	return desc;
 }
 
-exports.default = new (_dec = (0, _coreDecorators.decorate)(_decorators.promise), _dec2 = (0, _coreDecorators.decorate)(_decorators.payment), _dec3 = (0, _coreDecorators.decorate)(_decorators.promise), _dec4 = (0, _coreDecorators.decorate)(_decorators.promise), _dec5 = (0, _coreDecorators.decorate)(_decorators.promise), _dec6 = (0, _coreDecorators.decorate)(_decorators.payment), _dec7 = (0, _coreDecorators.decorate)(_decorators.promise), _dec8 = (0, _coreDecorators.decorate)(_decorators.promise), _dec9 = (0, _coreDecorators.decorate)(_decorators.promise), _dec10 = (0, _coreDecorators.decorate)(_decorators.promise), _dec11 = (0, _coreDecorators.decorate)(_decorators.promise), _dec12 = (0, _coreDecorators.decorate)(_decorators.promise), _dec13 = (0, _coreDecorators.decorate)(_decorators.promise), _dec14 = (0, _coreDecorators.decorate)(_decorators.promise), _dec15 = (0, _coreDecorators.decorate)(_decorators.promise), _dec16 = (0, _coreDecorators.decorate)(_decorators.promise), _dec17 = (0, _coreDecorators.decorate)(_decorators.promise), (_class = (_temp = _class2 = function (_Debuggable) {
+exports.default = new (_dec = (0, _coreDecorators.decorate)(_decorators.promise), _dec2 = (0, _coreDecorators.decorate)(_decorators.payment), _dec3 = (0, _coreDecorators.decorate)(_decorators.promise), _dec4 = (0, _coreDecorators.decorate)(_decorators.promise), _dec5 = (0, _coreDecorators.decorate)(_decorators.promise), _dec6 = (0, _coreDecorators.decorate)(_decorators.payment), _dec7 = (0, _coreDecorators.decorate)(_decorators.promise), _dec8 = (0, _coreDecorators.decorate)(_decorators.promise), _dec9 = (0, _coreDecorators.decorate)(_decorators.promise), _dec10 = (0, _coreDecorators.decorate)(_decorators.promise), _dec11 = (0, _coreDecorators.decorate)(_decorators.promise), _dec12 = (0, _coreDecorators.decorate)(_decorators.promise), _dec13 = (0, _coreDecorators.decorate)(_decorators.promise), _dec14 = (0, _coreDecorators.decorate)(_decorators.promise), _dec15 = (0, _coreDecorators.decorate)(_decorators.promise), _dec16 = (0, _coreDecorators.decorate)(_decorators.promise), _dec17 = (0, _coreDecorators.decorate)(_decorators.promise), _dec18 = (0, _coreDecorators.decorate)(_decorators.promise), (_class = (_temp = _class2 = function (_Debuggable) {
 	_inherits(StripeAPI, _Debuggable);
 
 	function StripeAPI() {
@@ -82,10 +82,8 @@ exports.default = new (_dec = (0, _coreDecorators.decorate)(_decorators.promise)
 
 	}, {
 		key: "chargesCreate",
-		value: function chargesCreate(user, data, idempotencyKey) {
-			return (0, _stripe2.default)(user.payment.privateKey).charges.create(data, {
-				idempotency_key: idempotencyKey // eslint-disable-line camelcase
-			});
+		value: function chargesCreate(user, data, options) {
+			return (0, _stripe2.default)(user.payment.privateKey).charges.create(data, options);
 		}
 	}, {
 		key: "chargesRetrieve",
@@ -191,16 +189,21 @@ exports.default = new (_dec = (0, _coreDecorators.decorate)(_decorators.promise)
 		// TRANSFER
 
 	}, {
-		key: "transfersList",
-		value: function transfersList(user, data) {
+		key: "transferCreate",
+		value: function transferCreate(user, data, options) {
+			return (0, _stripe2.default)(user.payment.privateKey).transfers.create(data, options);
+		}
+	}, {
+		key: "transferList",
+		value: function transferList(user, data) {
 			return (0, _stripe2.default)(user.payment.privateKey).transfers.list(data);
 		}
 
 		// BALANCE
 
 	}, {
-		key: "transfersList",
-		value: function transfersList(user, data) {
+		key: "transactionsList",
+		value: function transactionsList(user, data) {
 			return (0, _stripe2.default)(user.payment.privateKey).balance.listTransactions(data);
 		}
 
@@ -233,4 +236,4 @@ exports.default = new (_dec = (0, _coreDecorators.decorate)(_decorators.promise)
 	}]);
 
 	return StripeAPI;
-}(_debuggable2.default), _class2.key = "STRIPE_API", _temp), (_applyDecoratedDescriptor(_class.prototype, "getClient", [_coreDecorators.override], Object.getOwnPropertyDescriptor(_class.prototype, "getClient"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "chargesCreate", [_dec, _dec2], Object.getOwnPropertyDescriptor(_class.prototype, "chargesCreate"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "chargesRetrieve", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "chargesRetrieve"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "chargesList", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "chargesList"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "refundsCreate", [_dec5, _dec6], Object.getOwnPropertyDescriptor(_class.prototype, "refundsCreate"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "createManagedAccount", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "createManagedAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "updateManagedAccount", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "updateManagedAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "retrieveManagedAccount", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "retrieveManagedAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "deleteManagedAccount", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "deleteManagedAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "listManagedAccount", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "listManagedAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "createExternalAccount", [_dec12], Object.getOwnPropertyDescriptor(_class.prototype, "createExternalAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "updateExternalAccount", [_dec13], Object.getOwnPropertyDescriptor(_class.prototype, "updateExternalAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "retrieveExternalAccount", [_dec14], Object.getOwnPropertyDescriptor(_class.prototype, "retrieveExternalAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "deleteExternalAccount", [_dec15], Object.getOwnPropertyDescriptor(_class.prototype, "deleteExternalAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "transfersList", [_dec16], Object.getOwnPropertyDescriptor(_class.prototype, "transfersList"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "transfersList", [_dec17], Object.getOwnPropertyDescriptor(_class.prototype, "transfersList"), _class.prototype)), _class))();
+}(_debuggable2.default), _class2.key = "STRIPE_API", _temp), (_applyDecoratedDescriptor(_class.prototype, "getClient", [_coreDecorators.override], Object.getOwnPropertyDescriptor(_class.prototype, "getClient"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "chargesCreate", [_dec, _dec2], Object.getOwnPropertyDescriptor(_class.prototype, "chargesCreate"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "chargesRetrieve", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "chargesRetrieve"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "chargesList", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "chargesList"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "refundsCreate", [_dec5, _dec6], Object.getOwnPropertyDescriptor(_class.prototype, "refundsCreate"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "createManagedAccount", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "createManagedAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "updateManagedAccount", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "updateManagedAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "retrieveManagedAccount", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "retrieveManagedAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "deleteManagedAccount", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "deleteManagedAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "listManagedAccount", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "listManagedAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "createExternalAccount", [_dec12], Object.getOwnPropertyDescriptor(_class.prototype, "createExternalAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "updateExternalAccount", [_dec13], Object.getOwnPropertyDescriptor(_class.prototype, "updateExternalAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "retrieveExternalAccount", [_dec14], Object.getOwnPropertyDescriptor(_class.prototype, "retrieveExternalAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "deleteExternalAccount", [_dec15], Object.getOwnPropertyDescriptor(_class.prototype, "deleteExternalAccount"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "transferCreate", [_dec16], Object.getOwnPropertyDescriptor(_class.prototype, "transferCreate"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "transferList", [_dec17], Object.getOwnPropertyDescriptor(_class.prototype, "transferList"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "transactionsList", [_dec18], Object.getOwnPropertyDescriptor(_class.prototype, "transactionsList"), _class.prototype)), _class))();
