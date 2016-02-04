@@ -6,7 +6,6 @@ import moment from "moment";
 import DateRange from "moment-range";  // eslint-disable-line no-unused-vars
 import {decorate, override} from "core-decorators";
 import googleapis from "googleapis";
-import {countAttendees} from "./utils/utils";
 import {promise, callback} from "./utils/decorators";
 import Debuggable from "./utils/debuggable";
 
@@ -194,12 +193,12 @@ export default new class GoogleAPI extends Debuggable {
 				// TODO use statuses from EventController
 				// don't require EventController in hook (mongoose best practice)
 				// don't import EventController (circular dependency)
-				description: event.status === "inactive" ? "Cancelled" : `${countAttendees(event.attendees)}/${event.maxOcc} Guests (${event.minOcc} min)`,
+				description: event.status === "inactive" ? "Cancelled" : `${event.attendees}/${event.maxOcc} Guests (${event.minOcc} min)`,
 				extendedProperties: {
 					private: {
 						minOcc: event.minOcc,
 						maxOcc: event.maxOcc,
-						count: event.status === "inactive" ? 0 : countAttendees(event.attendees)
+						count: event.status === "inactive" ? 0 : event.attendees
 					}
 				}
 			}

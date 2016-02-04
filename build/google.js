@@ -28,8 +28,6 @@ var _googleapis = require("googleapis");
 
 var _googleapis2 = _interopRequireDefault(_googleapis);
 
-var _utils = require("./utils/utils");
-
 var _decorators = require("./utils/decorators");
 
 var _debuggable = require("./utils/debuggable");
@@ -246,12 +244,12 @@ exports.default = new (_dec = (0, _coreDecorators.decorate)(_decorators.callback
 					// TODO use statuses from EventController
 					// don't require EventController in hook (mongoose best practice)
 					// don't import EventController (circular dependency)
-					description: event.status === "inactive" ? "Cancelled" : (0, _utils.countAttendees)(event.attendees) + "/" + event.maxOcc + " Guests (" + event.minOcc + " min)",
+					description: event.status === "inactive" ? "Cancelled" : event.attendees + "/" + event.maxOcc + " Guests (" + event.minOcc + " min)",
 					extendedProperties: {
 						private: {
 							minOcc: event.minOcc,
 							maxOcc: event.maxOcc,
-							count: event.status === "inactive" ? 0 : (0, _utils.countAttendees)(event.attendees)
+							count: event.status === "inactive" ? 0 : event.attendees
 						}
 					}
 				}
