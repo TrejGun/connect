@@ -126,12 +126,12 @@ export default new class StripeAPI extends Debuggable {
 	// TRANSFER
 
 	@decorate(promise)
-	transferCreate(user, data, options) {
+	transfersCreate(user, data, options) {
 		return stripe(user.payment.privateKey).transfers.create(data, options);
 	}
 
 	@decorate(promise)
-	transferList(user, data) {
+	transfersList(user, data) {
 		return stripe(user.payment.privateKey).transfers.list(data);
 	}
 
