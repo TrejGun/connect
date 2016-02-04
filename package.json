@@ -46,7 +46,6 @@
     "eslint": "1.10.3",
     "eslint-config-trejgun": "git://github.com/TrejGun/eslint-config-trejgun.git#6beca5e7537dac1a70d155796f73df2555792495",
     "mocha": "2.3.4",
-    "mocha-retry": "git://github.com/TrejGun/mocha-retry.git#fbdcb34a3bafa208e9ec74cdfbddac8f6d997af6",
     "nodemon": "1.8.1",
     "power-assert": "1.2.0"
   },

@@ -1,5 +1,6 @@
--R spec
---ui mocha-retry
---timeout 30000
 --compilers js:babel-core/register
+--reporter spec
 --require test/mocha
+--retries 1
+--timeout 30000
+--ui mocha-retry
