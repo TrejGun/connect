@@ -111,18 +111,18 @@ exports.default = new (_dec = (0, _coreDecorators.decorate)(_decorators.callback
 		}
 	}, {
 		key: "insertCalendar",
-		value: function insertCalendar(done, user) {
+		value: function insertCalendar(done, operator) {
 			var _this3 = this;
 
-			if (user.isNew && user.role === "operator") {
+			if (operator.isNew) {
 				this.calendar("calendars", "insert", {
 					resource: {
-						summary: user.companyName + " Availability"
+						summary: operator.companyName + " Availability"
 					}
 				}).then(function (result) {
-					user.set("calendarId", result[0].id);
+					operator.set("calendarId", result[0].id);
 					return _this3.calendar("acl", "insert", {
-						calendarId: user.calendarId,
+						calendarId: operator.calendarId,
 						resource: {
 							role: "reader",
 							scope: {
@@ -139,16 +139,12 @@ exports.default = new (_dec = (0, _coreDecorators.decorate)(_decorators.callback
 		}
 	}, {
 		key: "deleteCalendar",
-		value: function deleteCalendar(done, user) {
-			if (user.role === "operator") {
-				this.calendar("calendars", "delete", {
-					calendarId: user.calendarId
-				}).then(function () {
-					done();
-				}).catch(done).done();
-			} else {
+		value: function deleteCalendar(done, operator) {
+			this.calendar("calendars", "delete", {
+				calendarId: operator.calendarId
+			}).then(function () {
 				done();
-			}
+			}).catch(done).done();
 		}
 	}, {
 		key: "insertTimeSlot",

@@ -45,17 +45,17 @@ export default new class GoogleAPI extends Debuggable {
 	}
 
 	@decorate(callback)
-	insertCalendar(done, user) {
-		if (user.isNew && user.role === "operator") {
+	insertCalendar(done, operator) {
+		if (operator.isNew) {
 			this.calendar("calendars", "insert", {
 					resource: {
-						summary: user.companyName + " Availability"
+						summary: operator.companyName + " Availability"
 					}
 				})
 				.then(result => {
-					user.set("calendarId", result[0].id);
+					operator.set("calendarId", result[0].id);
 					return this.calendar("acl", "insert", {
-						calendarId: user.calendarId,
+						calendarId: operator.calendarId,
 						resource: {
 							role: "reader",
 							scope: {
@@ -75,19 +75,15 @@ export default new class GoogleAPI extends Debuggable {
 	}
 
 	@decorate(callback)
-	deleteCalendar(done, user) {
-		if (user.role === "operator") {
-			this.calendar("calendars", "delete", {
-					calendarId: user.calendarId
-				})
-				.then(() => {
-					done();
-				})
-				.catch(done)
-				.done();
-		} else {
-			done();
-		}
+	deleteCalendar(done, operator) {
+		this.calendar("calendars", "delete", {
+				calendarId: operator.calendarId
+			})
+			.then(() => {
+				done();
+			})
+			.catch(done)
+			.done();
 	}
 
 	@decorate(callback)
