@@ -57,7 +57,7 @@ export default new class StripeAPI extends Debuggable {
 			default_currency: getCurrency(user), // eslint-disable-line camelcase
 			statement_descriptor: user.companyName.substring(0, 22), // eslint-disable-line camelcase
 			tos_acceptance: { // eslint-disable-line camelcase
-				date: Date.now() / 1000,
+				date: Math.round(Date.now() / 1000),
 				ip: data.ip,
 				user_agent: data.ua // eslint-disable-line camelcase
 			},
