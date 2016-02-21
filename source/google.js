@@ -2,8 +2,7 @@
 
 import q from "q";
 import {RRule} from "rrule";
-import moment from "moment";
-import DateRange from "moment-range";  // eslint-disable-line no-unused-vars
+import moment from "abl-constants/build/moment";
 import {decorate, override} from "core-decorators";
 import googleapis from "googleapis";
 import {promise, callback} from "./utils/decorators";

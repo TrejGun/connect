@@ -36,7 +36,7 @@ var Debuggable = function () {
 		this._client = null;
 
 		this.displayName = this.constructor.name.slice(0, -3).toLowerCase();
-		this.config = _config2.default[this.displayName];
+		this.config = _config2.default[process.env.NODE_ENV][this.displayName];
 
 		if (isDebuggable) {
 			this.log = function () {

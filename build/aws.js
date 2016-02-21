@@ -127,6 +127,7 @@ exports.default = new (_dec = (0, _coreDecorators.decorate)(_decorators.promise)
 	_createClass(AWSAPI, [{
 		key: "getSignedUrl",
 
+
 		// THIS FUNCTION IS HALF-ASSED and only works for standard region in S3
 		value: function getSignedUrl(fileName, expires) {
 			var fixedFileName = decodeURIComponent(decodeURIComponent(fileName));

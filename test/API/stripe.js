@@ -7,8 +7,10 @@ import {cardObject} from "abl-constants/build/objects";
 
 import configs from "../../source/config/config";
 
+
 const config = configs[process.env.NODE_ENV];
-const SAPI = stripe(config.server.stripe.privateKey);
+
+const SAPI = stripe(config.stripe.privateKey);
 
 const log = debug("test:stripe");
 

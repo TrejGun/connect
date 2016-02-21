@@ -119,7 +119,7 @@ exports.default = new (_dec = (0, _coreDecorators.decorate)(_decorators.promise)
 				default_currency: (0, _utils.getCurrency)(user), // eslint-disable-line camelcase
 				statement_descriptor: user.companyName.substring(0, 22), // eslint-disable-line camelcase
 				tos_acceptance: { // eslint-disable-line camelcase
-					date: Date.now() / 1000,
+					date: Math.round(Date.now() / 1000),
 					ip: data.ip,
 					user_agent: data.ua // eslint-disable-line camelcase
 				},

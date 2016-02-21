@@ -2,7 +2,7 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _desc, _value, _class, _class2, _temp; // eslint-disable-line no-unused-vars
+var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _desc, _value, _class, _class2, _temp;
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
@@ -14,13 +14,9 @@ var _q2 = _interopRequireDefault(_q);
 
 var _rrule = require("rrule");
 
-var _moment = require("moment");
+var _moment = require("abl-constants/build/moment");
 
 var _moment2 = _interopRequireDefault(_moment);
-
-var _momentRange = require("moment-range");
-
-var _momentRange2 = _interopRequireDefault(_momentRange);
 
 var _coreDecorators = require("core-decorators");
 
