@@ -8,7 +8,7 @@ import TAPI from "../../source/twilio";
 const log = debug("test:twilio");
 
 describe("Twilio", () => {
-	if (process.env.TWILIO_API === "true") {
+	if (process.env.TWILIO_API !== "true") {
 		log("Twilio API was not tested");
 		return;
 	}
@@ -16,7 +16,10 @@ describe("Twilio", () => {
 	it("should send sms", () => {
 		return TAPI.sendSMS({
 				to: "+6281239198760",
-				body: "test!"
+				body: "test!",
+				toObject() {
+					return this;
+				}
 			})
 			.then(sms => {
 				log(sms);

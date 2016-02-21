@@ -13,7 +13,7 @@ export default class Debuggable {
 
 	constructor(isDebuggable) {
 		this.displayName = this.constructor.name.slice(0, -3).toLowerCase();
-		this.config = config[this.displayName];
+		this.config = config[process.env.NODE_ENV][this.displayName];
 
 		if (isDebuggable) {
 			this.log = (...args) =>

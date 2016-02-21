@@ -1,6 +1,6 @@
 {
   "name": "abl-connect",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "title": "ABL - connect",
   "description": "connect abl projects to 3rd party api",
@@ -19,7 +19,7 @@
     "url": "https://github.com/bucket-list/connect/issues"
   },
   "dependencies": {
-    "abl-utils": "git+ssh://github.com/bucket-list/utils.git#0.1.0",
+    "abl-utils": "git+ssh://github.com/bucket-list/utils.git#0.1.9",
     "core-decorators": "0.11.0",
     "debug": "2.2.0",
     "googleapis": "2.1.7",
@@ -35,17 +35,16 @@
     "twilio": "3.1.0-edge"
   },
   "devDependencies": {
-    "abl-constants": "git+ssh://github.com/TrejGun/constants.git#0.1.0",
-    "babel-core": "6.4.5",
-    "babel-cli": "6.4.5",
-    "babel-plugin-espower": "2.1.0",
+    "abl-constants": "git+ssh://github.com/TrejGun/constants.git#0.1.1",
+    "babel-core": "6.5.1",
+    "babel-cli": "6.5.1",
+    "babel-plugin-espower": "2.1.1",
     "babel-plugin-transform-decorators-legacy": "1.3.4",
-    "babel-polyfill": "6.3.14",
     "babel-preset-es2015": "6.3.13",
     "babel-preset-stage-0": "6.3.13",
     "eslint": "1.10.3",
     "eslint-config-trejgun": "git://github.com/TrejGun/eslint-config-trejgun.git#6beca5e7537dac1a70d155796f73df2555792495",
-    "mocha": "2.3.4",
+    "mocha": "2.4.5",
     "nodemon": "1.8.1",
     "power-assert": "1.2.0"
   },
@@ -55,6 +54,6 @@
   "scripts": {
     "build": "rm -rf build && babel -d ./build ./source",
     "lint": "eslint source/*",
-    "test": "NODE_ENV=${NODE_ENV:=test} env $(<.env) mocha --opts test/mocha.opts"
+    "test": "NODE_ENV=${NODE_ENV:=test} ABL_DEBUG=${ABL_DEBUG:=true} env $(<.env) babel-node node_modules/.bin/_mocha"
   }
 }
