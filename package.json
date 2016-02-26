@@ -1,6 +1,6 @@
 {
   "name": "abl-connect",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "license": "MIT",
   "title": "ABL - connect",
   "description": "connect abl projects to 3rd party api",
