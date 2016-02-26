@@ -3,6 +3,7 @@
 import q from "q";
 import {RRule} from "rrule";
 import moment from "abl-constants/build/moment";
+import {date} from "abl-constants/build/date";
 import {decorate, override} from "core-decorators";
 import googleapis from "googleapis";
 import {promise, callback} from "./utils/decorators";
@@ -15,8 +16,8 @@ export default new class GoogleAPI extends Debuggable {
 
 	static key = "GOOGLE_API";
 
-	constructor() {
-		super(...arguments);
+	constructor(...arg) {
+		super(...arg);
 		this._calendar = googleapis.calendar("v3");
 	}
 
@@ -48,7 +49,7 @@ export default new class GoogleAPI extends Debuggable {
 		if (operator.isNew) {
 			this.calendar("calendars", "insert", {
 					resource: {
-						summary: operator.companyName + " Availability"
+						summary: `${operator.companyName} Availability`
 					}
 				})
 				.then(result => {
@@ -87,6 +88,10 @@ export default new class GoogleAPI extends Debuggable {
 
 	@decorate(callback)
 	insertTimeSlot(done, timeslot) {
+		if (timeslot.isStartTimeChanged || timeslot.isEndTimeChanged) {
+			timeslot.set("untilTime", date);
+		}
+
 		if (timeslot.single) {
 			timeslot.set("untilTime", timeslot.startTime);
 		}
@@ -108,11 +113,11 @@ export default new class GoogleAPI extends Debuggable {
 					},
 					// status: "cancelled",
 					recurrence: [
-						"RRULE:" + new RRule({
+						`RRULE:${new RRule({
 							freq: RRule.WEEKLY,
 							byweekday: timeslot.daysRunning,
 							until: timeslot.untilTime
-						}).toString()
+						}).toString()}`
 					],
 					colorId: "11",
 					summary: timeslot.title,
@@ -241,20 +246,20 @@ export default new class GoogleAPI extends Debuggable {
     }
 
 	fixDate(timeslot) {
-		let date = null;
+		let dateTime = null;
 
 		moment.range(timeslot.startTime, timeslot.untilTime).by("days", day => {
-			if (!date && timeslot.daysRunning.indexOf(day.isoWeekday() - 1) !== -1) {
-				date = day.toDate();
+			if (!dateTime && timeslot.daysRunning.indexOf(day.isoWeekday() - 1) !== -1) {
+				dateTime = day.toDate();
 			}
 		});
 
-		if (!date) {
+		if (!dateTime) {
 			timeslot.invalidate("startTime", "Date is out of range", timeslot.startTime);
 		} else {
 			// doesn't call setter
-			timeslot.endTime.setMilliseconds(date - timeslot.startTime);
-			timeslot.startTime.setMilliseconds(date - timeslot.startTime);
+			timeslot.endTime.setMilliseconds(dateTime - timeslot.startTime);
+			timeslot.startTime.setMilliseconds(dateTime - timeslot.startTime);
 		}
 	}
 };

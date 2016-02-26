@@ -24,19 +24,19 @@ describe("stripe API", () => {
 	let charge;
 
 	describe("Stripe", () => {
-		it("should create token", () => {
-			return SAPI.tokens.create({
+		it("should create token", () =>
+			SAPI.tokens.create({
 					card: cardObject()
 				})
 				.then(result => {
 					log(result);
 					assert.equal(result.object, "token");
 					token = result.id;
-				});
-		});
+				})
+		);
 
-		it("should create charge", () => {
-			return SAPI.charges.create({
+		it("should create charge", () =>
+			SAPI.charges.create({
 					amount: 1000,
 					source: token,
 					currency: "usd",
@@ -46,17 +46,17 @@ describe("stripe API", () => {
 					log(result);
 					assert.equal(result.object, "charge");
 					charge = result.id;
-				});
-		});
+				})
+		);
 
-		it("should create refund", () => {
-			return SAPI.charges.createRefund(charge, {
+		it("should create refund", () =>
+			SAPI.charges.createRefund(charge, {
 					reason: "requested_by_customer"
 				})
 				.then(result => {
 					log(result);
 					assert.equal(result.object, "refund");
-				});
-		});
+				})
+		);
 	});
 });

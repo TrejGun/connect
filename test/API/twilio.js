@@ -13,8 +13,8 @@ describe("Twilio", () => {
 		return;
 	}
 
-	it("should send sms", () => {
-		return TAPI.sendSMS({
+	it("should send sms", () =>
+		TAPI.sendSMS({
 				to: "+6281239198760",
 				body: "test!",
 				toObject() {
@@ -24,6 +24,6 @@ describe("Twilio", () => {
 			.then(sms => {
 				log(sms);
 				assert(sms);
-			});
-	});
+			})
+	);
 });

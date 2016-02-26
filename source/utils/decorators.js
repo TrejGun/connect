@@ -36,7 +36,7 @@ export function payment(fn) {
 		if (paymentMethod === "credit") {
 			return fn.bind(this)(...args);
 		} else {
-			return q.resolve({id: "abl_" + getRandomString(20)});
+			return q.resolve({id: `abl_${getRandomString(20)}`});
 		}
 	};
 }

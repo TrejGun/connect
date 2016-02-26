@@ -12,7 +12,7 @@ import Debuggable from "./utils/debuggable";
 
 
 function ensureLeadingSlash(filename) {
-	return filename[0] !== "/" ? "/" + filename : filename;
+	return filename[0] !== "/" ? `/${filename}` : filename;
 }
 
 function getEpoch(expires) {
@@ -38,21 +38,22 @@ function canonicalizeHeaders(headers) {
 			continue;
 		}
 
-		buf.push(field + ":" + val);
+		buf.push(`${field}:${val}`);
 	}
 
-	return buf.sort((a, b) => {
+	return buf.sort((a, b) =>
 		// Headers are sorted lexigraphically based on the header name only.
-		return a.split(":")[0] > b.split(":")[0] ? 1 : -1;
-	}).join("\n");
+		a.split(":")[0] > b.split(":")[0] && 1 || -1
+	).join("\n");
 }
 
 function queryStringToSign(resource, mimeType, epoch) {
-	return "PUT\n\n" +
-		mimeType + "\n" +
-		epoch + "\n" +
-		canonicalizeHeaders({"x-amz-acl": "public-read"}) + "\n" +
-		resource;
+	return `PUT\n\n
+		${mimeType}\n
+		${epoch}\n
+		${canonicalizeHeaders({"x-amz-acl": "public-read"})}\n
+		${resource}
+		`;
 }
 
 
@@ -66,7 +67,7 @@ export default new class AWSAPI extends Debuggable {
 		const fixedFileName = decodeURIComponent(decodeURIComponent(fileName));
 		const signedUrl = "https://s3.amazonaws.com";
 		const pathname = url.parse(fixedFileName).pathname;
-		const resource = "/" + this.config.s3.bucket + ensureLeadingSlash(pathname);
+		const resource = `/${this.config.s3.bucket}${ensureLeadingSlash(pathname)}`;
 		const mimeType = mime.lookup(fixedFileName);
 		if (["image/png", "image/jpeg"].indexOf(mimeType) === -1) {
 			return q.reject({
@@ -84,7 +85,7 @@ export default new class AWSAPI extends Debuggable {
 		});
 		return q({
 			success: true,
-			url: signedUrl + resource + "?" + queryString,
+			url: `${signedUrl}${resource}?${queryString}`,
 			file: getRandomString(20),
 			bucketUrl: this.config.s3.url
 		});

@@ -150,14 +150,14 @@ export default new class StripeAPI extends Debuggable {
 			}, {
 				stripe_account: user.payment.account // eslint-disable-line camelcase
 			})
-			.then(file => {
-				return this.client.accounts.update(user.payment.account, {
+			.then(file =>
+				this.client.accounts.update(user.payment.account, {
 					legal_entity: { // eslint-disable-line camelcase
 						verification: {
 							document: file.id
 						}
 					}
-				});
-			});
+				})
+			);
 	}
 };
