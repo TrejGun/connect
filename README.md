@@ -45,3 +45,10 @@ All boolean, default false
 * TWILIO_ACCOUNT_SID
 * TWILIO_AUTH_TOKEN
 * TWILIO_NUMBER
+
+## Configure googleapis
+1. https://console.developers.google.com - create service account key for calendar and download a p12 file.
+2. Use next command to convert it to pem
+bash cat key.p12 | openssl pkcs12 -nodes -passin pass:notasecret | openssl rsa > key.pem
+3. Use your App Engine default service account from https://console.developers.google.com/permissions/serviceaccounts for GOOGLE_SERVICE_EMAIL
+4. Use your key.pem file for GOOGLE_SERVICE_KEYFILE

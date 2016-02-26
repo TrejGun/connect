@@ -235,6 +235,11 @@ export default new class GoogleAPI extends Debuggable {
 		return this.calendar("events", "instances", event);
 	}
 
+    @decorate(promise)
+    getCalandars(data = {}) {
+        return this.calendar("calendarList", "list", data);
+    }
+
 	fixDate(timeslot) {
 		let date = null;
 
