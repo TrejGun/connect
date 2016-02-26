@@ -1,12 +1,12 @@
 "use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _dec, _desc, _value, _class, _class2, _temp;
-
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _dec, _desc, _value, _class, _class2, _temp;
 
 var _q = require("q");
 
@@ -106,13 +106,15 @@ function canonicalizeHeaders(headers) {
 	}
 
 	return buf.sort(function (a, b) {
-		// Headers are sorted lexigraphically based on the header name only.
-		return a.split(":")[0] > b.split(":")[0] ? 1 : -1;
+		return(
+			// Headers are sorted lexigraphically based on the header name only.
+			a.split(":")[0] > b.split(":")[0] && 1 || -1
+		);
 	}).join("\n");
 }
 
 function queryStringToSign(resource, mimeType, epoch) {
-	return "PUT\n\n" + mimeType + "\n" + epoch + "\n" + canonicalizeHeaders({ "x-amz-acl": "public-read" }) + "\n" + resource;
+	return "PUT\n\n\n\t\t" + mimeType + "\n\n\t\t" + epoch + "\n\n\t\t" + canonicalizeHeaders({ "x-amz-acl": "public-read" }) + "\n\n\t\t" + resource + "\n\t\t";
 }
 
 exports.default = new (_dec = (0, _coreDecorators.decorate)(_decorators.promise), (_class = (_temp = _class2 = function (_Debuggable) {
@@ -151,7 +153,7 @@ exports.default = new (_dec = (0, _coreDecorators.decorate)(_decorators.promise)
 			});
 			return (0, _q2.default)({
 				success: true,
-				url: signedUrl + resource + "?" + queryString,
+				url: "" + signedUrl + resource + "?" + queryString,
 				file: (0, _utils.getRandomString)(20),
 				bucketUrl: this.config.s3.url
 			});
