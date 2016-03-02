@@ -137,6 +137,13 @@ export default new class StripeAPI extends Debuggable {
 		return stripe(user.payment.privateKey).balance.listTransactions(data);
 	}
 
+	// TOKEN
+
+	@decorate(promise)
+	tokenCreate(data) {
+		return this.client.tokens.create(data);
+	}
+
 	// FILE UPLOAD
 
 	fileUploads(user, data) {
