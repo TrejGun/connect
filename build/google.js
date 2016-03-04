@@ -7,8 +7,6 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _desc, _value, _class, _class2, _temp;
-// import {date} from "abl-constants/build/date";
-
 
 var _q = require("q");
 
@@ -153,12 +151,6 @@ exports.default = new (_dec = (0, _coreDecorators.decorate)(_decorators.callback
 	}, {
 		key: "insertTimeSlot",
 		value: function insertTimeSlot(done, timeslot) {
-			/* world is not ready for this
-   if (timeslot.isStartTimeChanged || timeslot.isEndTimeChanged) {
-   	timeslot.set("untilTime", date);
-   }
-   */
-
 			if (timeslot.single) {
 				timeslot.set("untilTime", timeslot.startTime);
 			}

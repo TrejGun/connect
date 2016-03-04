@@ -3,7 +3,6 @@
 import q from "q";
 import {RRule} from "rrule";
 import moment from "abl-constants/build/moment";
-// import {date} from "abl-constants/build/date";
 import {decorate, override} from "core-decorators";
 import googleapis from "googleapis";
 import {promise, callback} from "./utils/decorators";
@@ -88,12 +87,6 @@ export default new class GoogleAPI extends Debuggable {
 
 	@decorate(callback)
 	insertTimeSlot(done, timeslot) {
-		/* world is not ready for this
-		if (timeslot.isStartTimeChanged || timeslot.isEndTimeChanged) {
-			timeslot.set("untilTime", date);
-		}
-		*/
-
 		if (timeslot.single) {
 			timeslot.set("untilTime", timeslot.startTime);
 		}
