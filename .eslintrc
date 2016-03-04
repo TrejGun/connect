@@ -1,5 +1,6 @@
 {
 	"extends": [
-		"trejgun/rules/server", "trejgun/rules/test"
+		"trejgun/rules/server",
+    "trejgun/rules/test"
 	]
 }
