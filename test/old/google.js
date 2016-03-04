@@ -216,6 +216,7 @@ describe("Google API", () => {
 						eventId: eventInstanceId
 					})
 					.then(gEventInstance => {
+						log("!!!!")
 						log(gEventInstance[0]);
 						assert.equal(gEventInstance[0].description, newDescription);
 						assert.equal(gEventInstance[0].start.dateTime, startDateTime);
@@ -255,6 +256,7 @@ describe("Google API", () => {
 								eventId
 							})
 							.then(instances => {
+								log("!!!!")
 								log(instances[0].items);
 								assert.equal(instances[0].items.length, 3);
 							});
