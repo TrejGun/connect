@@ -1,6 +1,3 @@
 {
   "extends": "babel-config-trejgun/rules/server-test.json",
-  "plugins": [
-      "transform-decorators-legacy"
-    ]
 }
