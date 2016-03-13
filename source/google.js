@@ -2,7 +2,7 @@
 
 import q from "q";
 import {RRule} from "rrule";
-import moment from "abl-constants/build/moment";
+import moment from "moment-config-trejgun";
 import {decorate, override} from "core-decorators";
 import googleapis from "googleapis";
 import {promise, callback} from "./utils/decorators";

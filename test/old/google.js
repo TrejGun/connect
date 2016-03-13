@@ -2,7 +2,7 @@
 
 import Q from "q";
 import debug from "debug";
-import moment from "moment";
+import moment from "moment-config-trejgun";
 import assert from "power-assert";
 import GAPI from "../../source/google";
 import {timeZone, date, ISO_8601, googleFormat} from "abl-constants/build/date";
@@ -216,7 +216,7 @@ describe("Google API", () => {
 						eventId: eventInstanceId
 					})
 					.then(gEventInstance => {
-						log("!!!!")
+						log("!!!!");
 						log(gEventInstance[0]);
 						assert.equal(gEventInstance[0].description, newDescription);
 						assert.equal(gEventInstance[0].start.dateTime, startDateTime);
@@ -256,7 +256,7 @@ describe("Google API", () => {
 								eventId
 							})
 							.then(instances => {
-								log("!!!!")
+								log("!!!!");
 								log(instances[0].items);
 								assert.equal(instances[0].items.length, 3);
 							});

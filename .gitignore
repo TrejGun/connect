@@ -3,3 +3,4 @@
 node_modules
 source/config/yourkey.pem
 coverage
+build
