@@ -22,11 +22,3 @@ export function getRandomString(length = 64, type = 3) {
 export function countAttendees(attendees) {
 	return Object.keys(attendees || {}).reduce((memo, key) => memo + attendees[key], 0);
 }
-
-export function getCurrency(user) {
-	if (user.payment) {
-		return user.payment.currency;
-	} else {
-		return user.location && user.location.countryCode.toLowerCase() === "ca" ? "cad" : "usd";
-	}
-}

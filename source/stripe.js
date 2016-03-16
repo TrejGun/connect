@@ -3,7 +3,7 @@
 import fs from "fs";
 import stripe from "stripe";
 import {decorate, override} from "core-decorators";
-import {getCurrency} from "./utils/utils";
+import {getCurrency} from "abl-utils/build/request";
 import {promise, payment} from "./utils/decorators";
 import Debuggable from "./utils/debuggable";
 
