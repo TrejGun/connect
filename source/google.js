@@ -45,32 +45,28 @@ export default new class GoogleAPI extends Debuggable {
 
 	@decorate(callback)
 	insertCalendar(done, operator) {
-		if (operator.isNew) {
-			this.calendar("calendars", "insert", {
+		this.calendar("calendars", "insert", {
+				resource: {
+					summary: `${operator.companyName} Availability`
+				}
+			})
+			.then(result => {
+				operator.set("calendarId", result[0].id);
+				return this.calendar("acl", "insert", {
+					calendarId: result[0].id,
 					resource: {
-						summary: `${operator.companyName} Availability`
-					}
-				})
-				.then(result => {
-					operator.set("calendarId", result[0].id);
-					return this.calendar("acl", "insert", {
-						calendarId: operator.calendarId,
-						resource: {
-							role: "reader",
-							scope: {
-								type: "default"
-							}
+						role: "reader",
+						scope: {
+							type: "default"
 						}
-					});
-				})
-				.then(() => {
-					done();
-				})
-				.catch(done)
-				.done();
-		} else {
-			done();
-		}
+					}
+				});
+			})
+			.then(() => {
+				done();
+			})
+			.catch(done)
+			.done();
 	}
 
 	@decorate(callback)
@@ -93,7 +89,7 @@ export default new class GoogleAPI extends Debuggable {
 
 		this.fixDate(timeslot);
 
-		return this.calendar("events", timeslot.isNew ? "insert" : "update", {
+		return this.calendar("events", timeslot.eventId ? "update" : "insert", {
 				calendarId: timeslot.calendarId,
 				eventId: timeslot.eventId,
 				// sendNotifications: true,
@@ -235,10 +231,10 @@ export default new class GoogleAPI extends Debuggable {
 		return this.calendar("events", "instances", event);
 	}
 
-    @decorate(promise)
-    getCalandars(data = {}) {
-        return this.calendar("calendarList", "list", data);
-    }
+	@decorate(promise)
+	getCalandars(data = {}) {
+		return this.calendar("calendarList", "list", data);
+	}
 
 	fixDate(timeslot) {
 		let dateTime = null;
