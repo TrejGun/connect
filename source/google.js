@@ -35,7 +35,7 @@ export default new class GoogleAPI extends Debuggable {
 			.thenResolve(this.client);
 	}
 
-	calendar(objName, action, data) {
+	calendar(objName, action, data = {}) {
 		return this.authorize()
 			.then(auth => {
 				Object.assign(data, {auth});
@@ -232,7 +232,7 @@ export default new class GoogleAPI extends Debuggable {
 	}
 
 	@decorate(promise)
-	getCalandars(data = {}) {
+	getCalandars(data) {
 		return this.calendar("calendarList", "list", data);
 	}
 

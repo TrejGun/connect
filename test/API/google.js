@@ -1,42 +1,29 @@
 "use strict";
 
 import assert from "power-assert";
-import q from "q";
-import asyncq from "async-q";
+import async from "async";
 import GAPI from "../../source/google";
-import {timeZone, startDate, endDate, untilDate, daysRunning} from "abl-constants/build/date";
-
+import moment from "moment-config-trejgun";
+import {timeZone, startTime, endTime, untilTime, daysRunning, ISO_8601} from "abl-constants/build/date";
+import {getEventInstanceId} from "abl-utils/build/event";
 
 describe("#GOOGLE API", () => {
-	const operators = [];
-
-	function setOperator(operator) {
-		if (operator.calendarId) {
-			if (operators.indexOf(operator) === -1) {
-				operators.push(operator);
-			}
-		}
-	}
-
-	function getOperator(arg) {
+	function getOperator(operator) {
 		return Object.assign({
-			isNew: true,
 			companyName: "SuperCompanyName",
 			set(calId, resultId) {
 				this[calId] = resultId;
 			}
-		}, arg);
+		}, operator);
 	}
 
-	function getTimeSlot(arg) {
+	function getTimeSlot(timeslot) {
 		return Object.assign({
 			timeZone,
-			startTime: startDate,
-			endTime: endDate,
-			untilTime: untilDate,
+			startTime,
+			endTime,
+			untilTime,
 			daysRunning,
-			isNew: true,
-			calendarId: operators[0].calendarId,
 			eventId: null,
 			title: "insertTimeSlot TEST",
 			minOcc: "2",
@@ -47,79 +34,45 @@ describe("#GOOGLE API", () => {
 			invalidate(item, message) {
 				this.title = message;
 			}
-		}, arg);
+		}, timeslot);
 	}
-
-	function delay(ms) {
-		return q.delay(ms);
-	}
-
 
 	describe("#insertCalendar and deleteCalendar", () => {
+		let operator;
+
+		after(done => {
+			GAPI.deleteCalendar(done, operator);
+		});
+
 		it("insertCalendar with new operator", done => {
-			const operator = getOperator({});
-			const pattern = /\w*(?=@)@?\w*\.\w*\.\w*\.\w*/;
+			operator = getOperator();
 			GAPI.insertCalendar(() => {
-				setOperator(operator);
-				assert.ok(pattern.test(operator.calendarId));
+				assert.ok(/\w*(?=@)@?\w*\.\w*\.\w*\.\w*/.test(operator.calendarId));
 				done();
 			}, operator);
-		});
-
-		it("insertCalendar with not new operator", () => {
-			const operator = getOperator({
-				isNew: false
-			});
-			const done = () => {
-				throw new Error("operator is not new");
-			};
-			assert.throws(() => {
-				GAPI.insertCalendar(done, operator);
-			}, e => e.message === "operator is not new");
-		});
-
-		it("insertCalendar with invalid calendarId", done => {
-			const operator = {
-				isNew: true,
-				isFirst: true,
-				companyName: "SuperCompanyName - 2",
-				set(calId, resultId) {
-					this[calId] = resultId;
-				},
-				get calendarId() {
-					if (this.isFirst) {
-						this.isFirst = false;
-						return null;
-					} else {
-						return this._calendarId;
-					}
-				},
-				set calendarId(calendarId) {
-					this._calendarId = calendarId;
-				}
-			};
-
-
-			const err = e => {
-				setOperator(operator);
-				assert.equal(e.message, "Missing required parameters: calendarId");
-				done();
-			};
-
-			GAPI.insertCalendar(err, operator);
 		});
 	});
 
 	describe("insertTimeSlot, updateTimeSlot", () => {
 		let timeslot;
+		let operator;
 
-		beforeEach("...", () => {
-			timeslot = getTimeSlot();
+		before(done => {
+			operator = getOperator();
+			GAPI.insertCalendar(done, operator);
+		});
+
+		beforeEach(() => {
+			timeslot = getTimeSlot(operator);
+		});
+
+		after(done => {
+			GAPI.deleteCalendar(done, operator);
 		});
 
 		it("insertTimeSlot new timeslot", done => {
 			GAPI.insertTimeSlot(() => {
-				assert.ok(timeslot.eventId !== null);
+				assert.ok(timeslot.eventId);
 				done();
 			}, timeslot);
 		});
@@ -163,18 +116,24 @@ describe("#GOOGLE API", () => {
 
 	describe("deleteTimeSlot", () => {
 		let timeslot;
+		let operator;
 
 		before(done => {
-			timeslot = getTimeSlot();
-			timeslot.title = "deleteTimeSlot TEST";
+			operator = getOperator();
+			GAPI.insertCalendar(done, operator);
+		});
 
-			GAPI.insertTimeSlot(() => {
-				done();
-			}, timeslot);
+		beforeEach(done => {
+			timeslot = getTimeSlot(operator);
+			GAPI.insertTimeSlot(done, timeslot);
+		});
+
+		after(done => {
+			GAPI.deleteCalendar(done, operator);
 		});
 
 		it("deleteTimeSlot with success status change to cancelled", done => {
-			const err = () => {
+			GAPI.deleteTimeSlot(() => {
 				GAPI.calendar("events", "get", {
 						calendarId: timeslot.calendarId,
 						eventId: timeslot.eventId
@@ -183,8 +142,7 @@ describe("#GOOGLE API", () => {
 						assert.equal(res[0].status, "cancelled");
 					})
 					.done(done);
-			};
-			GAPI.deleteTimeSlot(err, timeslot);
+			}, timeslot);
 		});
 
 		it("deleteTimeSlot in case time slot was inactivated", done => {
@@ -193,115 +151,136 @@ describe("#GOOGLE API", () => {
 
 		it("deleteTimeSlot with fake eventId", done => {
 			timeslot.eventId = "fakeId";
-
-			const err = e => {
+			GAPI.deleteTimeSlot(e => {
 				assert.equal(e.message, "Not Found");
 				done();
-			};
-			GAPI.deleteTimeSlot(err, timeslot);
+			}, timeslot);
 		});
 	});
 
 	describe("updateEvent", () => {
-		let event;
+		let timeslot;
+		let operator;
 
 		before(done => {
-			event = getTimeSlot();
-			event.title = "updateEvent TEST";
+			operator = getOperator();
+			GAPI.insertCalendar(done, operator);
+		});
 
-			GAPI.insertTimeSlot(() => {
-				done();
-			}, event);
+		beforeEach(done => {
+			timeslot = getTimeSlot(operator);
+			GAPI.insertTimeSlot(done, timeslot);
+		});
+
+		after(done => {
+			GAPI.deleteCalendar(done, operator);
 		});
 
 		it("updateEvent should update maxOcc", done => {
-			event.maxOcc = "50";
-			event.eventInstanceId = event.eventId;
-			const err = () => {
-				GAPI.getEvent(event)
-					.then((res) => {
-						assert.equal(res[0].extendedProperties.private.maxOcc, "50");
+			const newMaxOcc = 50;
+			const newTitle = "qwerty";
+			GAPI.updateEvent(() => {
+				GAPI.getInstances(timeslot)
+					.then(gEventInstances => {
+						const gEventInstance = gEventInstances[0].items.sort((a, b) => new Date(a.originalStartTime.dateTime) - new Date(b.originalStartTime.dateTime))[0];
+						assert.equal(gEventInstance.summary, newTitle);
+						assert.equal(gEventInstance.extendedProperties.private.maxOcc, newMaxOcc);
 					})
 					.done(done);
-			};
-			GAPI.updateEvent(err, event);
+			}, Object.assign({}, timeslot, {
+				title: newTitle,
+				maxOcc: newMaxOcc,
+				eventInstanceId: getEventInstanceId(timeslot.eventId, startTime),
+				eventId: null
+			}));
 		});
 
 		it("updateEvent with eventInstanceId = null", done => {
-			event.maxOcc = "100";
-			event.eventInstanceId = null;
-			event.status = "inactive";
-
-			const err = (e) => {
+			GAPI.updateEvent(e => {
 				assert.equal(e.message, "Missing required parameters: eventId");
 				done();
-			};
-			GAPI.updateEvent(err, event);
+			}, timeslot);
 		});
 	});
 
 	describe("deleteEvent", () => {
-		let event;
+		let timeslot;
+		let operator;
 
 		before(done => {
-			event = getTimeSlot();
-			event.title = "deleteEvent TEST";
-			event.eventInstanceId = null;
+			operator = getOperator();
+			GAPI.insertCalendar(done, operator);
+		});
 
-			GAPI.insertTimeSlot(() => {
-				done();
-			}, event);
+		beforeEach(done => {
+			timeslot = getTimeSlot(operator);
+			GAPI.insertTimeSlot(done, timeslot);
+		});
+
+		after(done => {
+			GAPI.deleteCalendar(done, operator);
 		});
 
 		it("deleteEvent with valid event", done => {
-			const err = () => {
-				GAPI.getEvent(event)
-					.then((res) => {
-						assert.equal(res[0].status, "cancelled");
+			GAPI.deleteEvent(() => {
+				GAPI.getInstances(timeslot)
+					.then(gEventInstances => {
+						gEventInstances[0].items.sort((a, b) => new Date(a.originalStartTime.dateTime) - new Date(b.originalStartTime.dateTime))
+							.forEach((instance, i) => {
+								assert.equal(moment.tz(instance.start.dateTime, instance.start.timeZone).tz("UTC").format(ISO_8601), moment(startTime).tz("UTC").add(i + 1, "d").format(ISO_8601));
+							});
 					})
 					.done(done);
-			};
-
-			GAPI.getEvent(event)
-				.then(res => {
-					event.eventInstanceId = res[0].id;
-				})
-				.then(() =>
-					GAPI.deleteEvent(err, event)
-				);
+			}, Object.assign({}, timeslot, {
+				eventInstanceId: getEventInstanceId(timeslot.eventId, startTime),
+				eventId: null
+			}));
 		});
 
 		it("deleteEvent in case of a 410 error", done => {
-			GAPI.deleteEvent(done, event);
+			GAPI.deleteEvent(() => {
+				GAPI.deleteEvent(assert.ifError, Object.assign({}, timeslot, {
+						eventInstanceId: getEventInstanceId(timeslot.eventId, startTime),
+						eventId: null
+					}))
+					.done(done);
+			}, Object.assign({}, timeslot, {
+				eventInstanceId: getEventInstanceId(timeslot.eventId, startTime),
+				eventId: null
+			}));
 		});
 
 		it("deleteEvent in case of a 404 error", done => {
-			event.eventInstanceId = "fakeId0000111";
-
-			const err = e => {
+			GAPI.deleteEvent(e => {
 				assert.equal(e.code, "404");
 				done();
-			};
-
-			GAPI.deleteEvent(err, event);
+			}, Object.assign({}, timeslot, {
+				eventInstanceId: "qwerty",
+				eventId: null
+			}));
 		});
 	});
 
 	describe("getInstances", () => {
-		let event;
+		let timeslot;
+		let operator;
 
 		before(done => {
-			event = getTimeSlot();
-			event.title = "getInstances TEST";
-			event.eventInstanceId = null;
+			operator = getOperator();
+			GAPI.insertCalendar(done, operator);
+		});
 
-			GAPI.insertTimeSlot(() => {
-				done();
-			}, event);
+		beforeEach(done => {
+			timeslot = getTimeSlot(operator);
+			GAPI.insertTimeSlot(done, timeslot);
+		});
+
+		after(done => {
+			GAPI.deleteCalendar(done, operator);
 		});
 
 		it("getInstances from timeSlot", done => {
-			GAPI.getInstances(event)
+			GAPI.getInstances(timeslot)
 				.then(res => {
 					assert.ok(res[0].items.length > 14);
 				})
@@ -310,35 +289,27 @@ describe("#GOOGLE API", () => {
 	});
 
 	describe("getCalandars", () => {
-		it("getCalandars ALL", done => {
-			GAPI.getCalandars()
-				.then(res => {
-					const cals = res[0].items.concat();
-					cals.filter(calendar => operators.find(operator => operator.calendarId === calendar.id || operator._calendarId === calendar.id));
-					assert.deepEqual(cals, res[0].items);
-				})
-				.then(done);
+		let operator;
+
+		before(done => {
+			operator = getOperator();
+			GAPI.insertCalendar(done, operator);
 		});
 
-		it("getCalandars with request object", done => {
-			GAPI.getCalandars({})
+		it.only("getCalandars ALL", done => {
+			GAPI.getCalandars()
 				.then(res => {
-					const cals = res[0].items.concat();
-					cals.filter(calendar => operators.find(operator => operator.calendarId === calendar.id || operator._calendarId === calendar.id));
-					assert.deepEqual(cals, res[0].items);
+					assert.ok(res[0].items.find(calendar => calendar.id === operator.calendarId));
 				})
-				.then(done);
+				.done(done);
 		});
 	});
 
-	after("Delete all calendars", () =>
-		asyncq.mapLimit(operators, 5, oper =>
-			delay(5000)
-				.then(() => {
-					const deferred = q.defer();
-					GAPI.deleteCalendar(deferred.makeNodeResolver(), oper);
-					return deferred.promise;
-				})
-		)
-	);
+	after("Delete all calendars", function (done) {
+		GAPI.getCalandars()
+			.then(res => {
+				this.timeout(res[0].items * 2 * 1000);
+				async.eachLimit(res[0].items, 1, (calendar, callback) => GAPI.deleteCalendar(callback, {calendarId: calendar.id}), done);
+			});
+	});
 });
