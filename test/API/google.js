@@ -239,11 +239,13 @@ describe("#GOOGLE API", () => {
 
 		it("deleteEvent in case of a 410 error", done => {
 			GAPI.deleteEvent(() => {
-				GAPI.deleteEvent(assert.ifError, Object.assign({}, timeslot, {
-						eventInstanceId: getEventInstanceId(timeslot.eventId, startTime),
-						eventId: null
-					}))
-					.done(done);
+				GAPI.deleteEvent(e => {
+					assert.ifError(e);
+					done();
+				}, Object.assign({}, timeslot, {
+					eventInstanceId: getEventInstanceId(timeslot.eventId, startTime),
+					eventId: null
+				}));
 			}, Object.assign({}, timeslot, {
 				eventInstanceId: getEventInstanceId(timeslot.eventId, startTime),
 				eventId: null
@@ -296,7 +298,7 @@ describe("#GOOGLE API", () => {
 			GAPI.insertCalendar(done, operator);
 		});
 
-		it.only("getCalandars ALL", done => {
+		it("getCalandars ALL", done => {
 			GAPI.getCalandars()
 				.then(res => {
 					assert.ok(res[0].items.find(calendar => calendar.id === operator.calendarId));
